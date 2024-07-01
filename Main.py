@@ -5,8 +5,8 @@ from pygame.locals import*
 
 #global variables for the game
 FPS = 32
-SCREENWIDTH = 289
-SCREENHEIGHT = 511
+SCREENWIDTH = 1080      #289
+SCREENHEIGHT = 800       #511
 
 SCREEN = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))
 GROUNDY = SCREENHEIGHT * 0.8 
@@ -15,10 +15,41 @@ GAME_SOUNDS = {}
 PLAYER = 'gallery/sprites/bird.png'
 BACKGROUND = 'gallery/sprites/background.png'
 PIPE = 'gallery/sprites/pipe.png'
+
+def welcomeScreen():
+    #shows welcome image on the screen
+    playerx = int(SCREENWIDTH/5)
+    playery = int((SCREENHEIGHT-GAME_SPRITES['player'].get_height())/2)
+    messagex = int((SCREENWIDTH-GAME_SPRITES['message'].get_width())/2)
+    messagey = int(SCREENHEIGHT*0.13)
+    basex = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT or (event.type==KEYDOWN and (event.key== K_ESCAPE or event.key == K_DOWN)):
+                pygame.quit()
+                sys.exit()
+
+            elif event.type == KEYDOWN and (event.key== K_SPACE or event.key == K_UP):
+                return
+            else:
+                SCREEN.blit(GAME_SPRITES['background'],(0,0))
+                SCREEN.blit(GAME_SPRITES['player'],(playerx,playery))
+                SCREEN.blit(GAME_SPRITES['message'],(messagex,messagey))
+                SCREEN.blit(GAME_SPRITES['base'],(basex,GROUNDY))
+                pygame.display.update()
+                FPSCLOCK.tick(FPS)
+
+def maingame():
+    score =0
+    playerx = int(SCREENWIDTH/5)
+    playery = int(SCREENHEIGHT/2)
+
+
+
 if __name__ == "__main__":
     # This will be the main point from where our game will start
     pygame.init()
-    FPSLOCK = pygame.time.Clock()
+    FPSCLOCK = pygame.time.Clock()
     pygame.display.set_caption('flappy bird')
     GAME_SPRITES['numbers']=(
         pygame.image.load('gallery/sprites/0.png').convert_alpha(),
@@ -52,6 +83,6 @@ if __name__ == "__main__":
     GAME_SPRITES['player']=pygame.image.load(PLAYER).convert_alpha()
 
     while True:
-        welcomescreen() #shows welcome screen to the user until he presses a button
+        welcomeScreen() #shows welcome screen to the user until he presses a button
         maingame() #this is the main game function
 
